@@ -12,8 +12,9 @@ const noteSchema = new mongoose.Schema({
         trim: true,
     },
     topic: {
-        type: [String],
+        type: String,
         required: true,
+        trim: true,
     },
     content: {
         type: String,

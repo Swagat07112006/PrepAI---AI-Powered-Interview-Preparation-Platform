@@ -12,8 +12,9 @@ const questionSchema = new mongoose.Schema({
         trim: true
     },
     platform: {
-        type: [String],
-        default: []
+        type: String,
+        required: true,
+        trim: true,
     },
     url: {
         type: String,
