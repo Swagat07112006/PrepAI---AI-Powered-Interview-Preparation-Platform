@@ -2,8 +2,9 @@ import { User } from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import generateAccessAndRefreshToken from "../utils/generateAccessAndRefreshToken.js";
+import asyncHandler from '../utils/asyncHandler.js'
 
-const registerUser = async (req, res) => {
+const registerUser = asyncHandler(async (req, res) => {
     const { userName, email, password, fullName } = req.body;
     if (!userName || !email || !password || !fullName) {
         throw new ApiError(400, "Username or Email or Password or FullName is missing")
@@ -29,9 +30,9 @@ const registerUser = async (req, res) => {
     return res.status(201).json(
         new ApiResponse(201, createdUser, "User registered successfully")
     )
-}
+})
 
-const loginUser = async (req, res) => {
+const loginUser = asyncHandler(async (req, res) => {
     const { userName, email, password } = req.body;
     if ((!userName && !email) || !password) {
         throw new ApiError(400, "Username or Email is required");
@@ -53,6 +54,7 @@ const loginUser = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+    
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -72,9 +74,9 @@ const loginUser = async (req, res) => {
                 "User loggedIn successfully"
             )
         )
-}
+})
 
-const logoutUser = async (req, res) => {
+const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
@@ -97,9 +99,9 @@ const logoutUser = async (req, res) => {
                 "User loggedOut successfully"
             )
         )
-}
+})
 
-const getCurrentUser = async (req, res) => {
+const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(
             200,
@@ -107,6 +109,6 @@ const getCurrentUser = async (req, res) => {
             "User fetched successfully"
         )
     );
-}
+})
 
 export { registerUser, loginUser, logoutUser, getCurrentUser }

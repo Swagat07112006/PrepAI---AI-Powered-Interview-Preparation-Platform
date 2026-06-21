@@ -2,6 +2,7 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import router from './routes/auth.routes.js'
+import errorHandler from './middlewares/error.middleware.js'
 
 const app = express()
 
@@ -24,4 +25,5 @@ app.get("/", (req, res) => {
         message: "PrepAI API Running"
     });
 });
+app.use(errorHandler)
 export default app
