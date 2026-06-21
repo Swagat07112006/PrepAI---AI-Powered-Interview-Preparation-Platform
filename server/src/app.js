@@ -1,6 +1,7 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import router from './routes/auth.routes.js'
 
 const app = express()
 
@@ -16,7 +17,7 @@ app.use(express.urlencoded({
     limit: "16kb",
 }))
 app.use(cookieParser())
-
+app.use('/api/v1/auth', router)
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
