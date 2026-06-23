@@ -10,6 +10,7 @@ const revisionSchema = new mongoose.Schema({
     questionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Question",
+        index: true,
         required: true,
     },
     dueDate: {
@@ -17,18 +18,14 @@ const revisionSchema = new mongoose.Schema({
         required: true,
         index: true,
     },
-    revisionStage: {
+    status: {
         type: String,
-        enum: ["Pending", "Ongoing", "Completed"],
+        enum: ["Pending", "Completed", "Missed"],
         default: "Pending",
     },
     completedAt: {
         type: Date,
     },
-    reminderSent: {
-        type: Boolean,
-        default: false
-    }
 }, { timestamps: true })
 
 export const Revision = mongoose.model("Revision", revisionSchema)

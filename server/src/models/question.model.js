@@ -4,35 +4,41 @@ const questionSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
+        index: true,
     },
     title: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        index: true,
     },
     platform: {
         type: String,
         required: true,
         trim: true,
+        index: true,
     },
     url: {
         type: String,
         trim: true,
     },
-    topic: {
+    topics: {
         type: [String],
         default: [],
+        index: true,
     },
     difficulty: {
         type: String,
         enum: ["easy", "medium", "hard"],
         required: true,
+        index: true,
     },
     status: {
         type: String,
         enum: ["Not Started", "In Progress", "Solved", "Needs Revision"],
         default: "Not Started",
+        index: true,
     },
     notes: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -40,18 +46,19 @@ const questionSchema = new mongoose.Schema({
     }],
     tags: {
         type: [String],
+        index: true,
         default: [],
     },
     solvedAt: {
-        type: Date
-    },
-    nextRevisionAt: {
         type: Date,
-    },
-    revisionCount: {
-        type: Number,
-        default: 0,
+        default: null
     },
 }, { timestamps: true })
+
+questionSchema.index({
+    userId: 1,
+    difficulty: 1,
+    status: 1,
+});
 
 export const Question = mongoose.model("Question", questionSchema)

@@ -25,13 +25,40 @@ const createQuestion = asyncHandler(async (req, res) => {
 })
 
 const listQuestions = asyncHandler(async (req, res) => {
-    const userQuestions = await Question.find({
+    const {page=1, limit=10, difficulty, status, topic} = req.query
+
+    const filter = {
         userId: req.user._id,
-    }).sort({createdAt: -1})
+    }
+    if(difficulty){
+        filter.difficulty = difficulty;
+    }
+    if(status){
+        filter.status = status;
+    }
+    if(topics){
+        filter.topics = topics;
+    }
+
+    const skip = (Number(page)-1) * Number(limit);
+    const total = await Question.countDocuments(filter)
+    const totalPages = Math.ceil(total/Number(limit));
+
+    const userQuestions = await Question.find(filter).sort({createdAt: -1}).skip(skip).limit(Number(limit))
+
+
     return res.status(200).json(
         new ApiResponse(
             200,
-            userQuestions,
+            {
+                data: userQuestions,
+                meta: {
+                    page: page,
+                    limit: limit,
+                    total: total,
+                    totalPages: totalPages,
+                }
+            },
             "User Questions fetched successfully"
         )
     )
@@ -65,10 +92,30 @@ const updateQuestion = asyncHandler(async (req, res) => {
     if(req.user._id.toString() !== question.userId.toString()){
         throw new ApiError(403, "Request Forbidden")
     }
+
+    const revisionSchedule = [1, 7, 14, 28, 56];
+    const wasSolved = question.status === "Solved";
+
     const allowedFields = ["title", 'platform', 'url', 'topic', 'difficulty', 'status', 'notes', 'tags']
     for(const field in updates){
         if(allowedFields.includes(field)){
             question[field] = updates[field]
+        }
+    }
+    
+    const isSolved = question.status === "Solved";
+    
+    if(!wasSolved && isSolved){
+        question.solvedAt = new Date();
+        for(const days of revisionSchedule){
+            const dueDate = new Date();
+            dueDate.setDate(dueDate.getDate()+days)
+            
+            await Revision.create({
+                userId: req.user._id,
+                questionId: question._id,
+                dueDate
+            })
         }
     }
     await question.save()
