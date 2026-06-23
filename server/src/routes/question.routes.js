@@ -1,31 +1,23 @@
 import { Router } from "express";
+import { createQuestion, deleteQuestion, getQuestion, listQuestions, updateQuestion } from "../controllers/question.controller.js";
+import authMiddleware from '../middlewares/auth.middleware.js'
+
 
 const router = Router()
 
-router.route('/').post((req, res) => {
-    res.status(501).json({
-        msg: "Not Implemented",
-    })
-})
-router.route('/').get((req, res) => {
-    res.status(501).json({
-        msg: "Not Implemented",
-    })
-})
-router.route('/:id').get((req, res) => {
-    res.status(501).json({
-        msg: "Not Implemented"
-    })
-})
-router.route('/:id').put((req, res) => {
-    res.status(501).json({
-        msg: "Not Implemented",
-    })
-})
-router.route('/:id').delete((req, res) => {
-    res.status(501).json({
-        msg: "Not Implemented",
-    })
-})
+// Create Questions
+router.route('/').post(authMiddleware, createQuestion)
+
+// Get All questions of user
+router.route('/').get(authMiddleware, listQuestions)
+
+// Get a particular question of user
+router.route('/:id').get(authMiddleware, getQuestion)
+
+// Update a question of a user
+router.route('/:id').put(authMiddleware, updateQuestion)
+
+// Delete a question of a user
+router.route('/:id').delete(authMiddleware, deleteQuestion)
 
 export default router
