@@ -2,9 +2,10 @@ import asyncHandler from '../utils/asyncHandler.js'
 import {Question} from '../models/question.model.js'
 import ApiResponse from '../utils/ApiResponse.js'
 import ApiError from '../utils/ApiError.js'
+import {Revision} from '../models/revision.model.js'
 
 const createQuestion = asyncHandler(async (req, res) => {
-    const {title, platform, difficulty} = req.body
+    const {title, platform, difficulty, topics=[], tags=[], url=""} = req.body
     if(!(title && platform && difficulty)){
         throw new ApiError(400, "Missing required fields: title, platform, difficulty")
     }
@@ -12,6 +13,9 @@ const createQuestion = asyncHandler(async (req, res) => {
         title: title,
         platform: platform,
         difficulty: difficulty,
+        topics,
+        tags,
+        url,
         userId: req.user._id
     })
 
@@ -25,7 +29,7 @@ const createQuestion = asyncHandler(async (req, res) => {
 })
 
 const listQuestions = asyncHandler(async (req, res) => {
-    const {page=1, limit=10, difficulty, status, topic} = req.query
+    const {page=1, limit=10, difficulty, status, topics, platform, q} = req.query
 
     const filter = {
         userId: req.user._id,
@@ -37,7 +41,29 @@ const listQuestions = asyncHandler(async (req, res) => {
         filter.status = status;
     }
     if(topics){
-        filter.topics = topics;
+        const topicsArray = topics.split(",")
+        filter.topics = {
+            $in: topicsArray
+        }
+    }
+    if(platform){
+        filter.platform = platform;
+    }
+    if(q){
+        filter.$or = [
+            {
+                title: {
+                    $regex: q,
+                    $options: "i",
+                }
+            },
+            {
+                tags: {
+                    $regex: q,
+                    $options: "i",
+                }
+            }
+        ]
     }
 
     const skip = (Number(page)-1) * Number(limit);
@@ -96,7 +122,7 @@ const updateQuestion = asyncHandler(async (req, res) => {
     const revisionSchedule = [1, 7, 14, 28, 56];
     const wasSolved = question.status === "Solved";
 
-    const allowedFields = ["title", 'platform', 'url', 'topic', 'difficulty', 'status', 'notes', 'tags']
+    const allowedFields = ["title", 'platform', 'url', 'topics', 'difficulty', 'status', 'notes', 'tags']
     for(const field in updates){
         if(allowedFields.includes(field)){
             question[field] = updates[field]

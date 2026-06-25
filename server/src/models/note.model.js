@@ -11,7 +11,7 @@ const noteSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    topic: {
+    topics: {
         type: String,
         required: true,
         trim: true,

@@ -26,6 +26,7 @@ const questionSchema = new mongoose.Schema({
     topics: {
         type: [String],
         default: [],
+        lowercase: true,
         index: true,
     },
     difficulty: {
@@ -55,10 +56,36 @@ const questionSchema = new mongoose.Schema({
     },
 }, { timestamps: true })
 
+questionSchema.pre("save", function(next){
+    if(this.status === "Solved" && !this.solvedAt){
+        this.solvedAt = new Date();
+    }
+    next();
+})
+
 questionSchema.index({
     userId: 1,
     difficulty: 1,
     status: 1,
+});
+questionSchema.index({
+    title: "text",
+    tags: "text"
+});
+
+questionSchema.index({
+    userId: 1,
+    status: 1
+});
+
+questionSchema.index({
+    userId: 1,
+    difficulty: 1
+});
+
+questionSchema.index({
+    userId: 1,
+    platform: 1
 });
 
 export const Question = mongoose.model("Question", questionSchema)
