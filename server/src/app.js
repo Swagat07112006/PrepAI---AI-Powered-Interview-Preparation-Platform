@@ -4,6 +4,7 @@ import cors from 'cors'
 import AuthRouter from './routes/auth.routes.js'
 import errorHandler from './middlewares/error.middleware.js'
 import questionRouter from './routes/question.routes.js'
+import notesRouter from './routes/note.routes.js'
 
 const app = express()
 
@@ -22,6 +23,7 @@ app.use(cookieParser())
 
 app.use('/api/v1/auth', AuthRouter)
 app.use('/api/v1/questions', questionRouter)
+app.use('/api/v1/notes', notesRouter)
 
 app.get("/", (req, res) => {
     res.status(200).json({
