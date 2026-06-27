@@ -26,13 +26,60 @@ const createNote = asyncHandler(async (req, res) => {
 })
 
 const listNotes = asyncHandler(async (req, res) => {
-    const userId = req.user._id;
-    const userNotes = await Note.find({ userId: userId}).sort({ createdAt: -1})
+    const {page=1, limit=10, q, topics, tags } = req.query
+    const filter = {
+        userId: req.user._id,
+    }
+    if(q){
+        filter.$or = [
+            {
+                title: {
+                    $regex: q,
+                    $options: "i",
+                },
+            },
+            {
+                content: {
+                    $regex: q,
+                    $options: "i",
+                }
+            }
+        ]
+    }
+    if(topics){
+        const topicsArray = topics.split(",")
+        filter.topics = {
+            $in: topicsArray
+        }
+    }
+    if(tags){
+        const tagsArray = tags.split(",")
+        filter.tags = {
+            $in: tagsArray
+        }
+    }
+
+    const pageNum = Number(page) || 1
+    const limitNum = Number(limit) || 10
+
+    const skip = (pageNum - 1) * limitNum
+    const total = await Note.countDocuments(filter)
+    const totalPages = Math.ceil(total/limitNum)
+
+    const userNotes = await Note.find(filter).sort({ createdAt: -1}).skip(skip).limit(limitNum)
 
     return res.status(200).json(
         new ApiResponse(
             200,
-            userNotes,
+            {
+                data: userNotes,
+                meta: {
+                    page: pageNum,
+                    limit: limitNum,
+                    total: total,
+                    totalPages: totalPages,
+                }
+            },
             "User Notes fetched successfully"
         )
     )
