@@ -140,7 +140,7 @@ const updateQuestion = asyncHandler(async (req, res) => {
             await Revision.create({
                 userId: req.user._id,
                 questionId: question._id,
-                dueDate
+                dueDate: dueDate,
             })
         }
     }
