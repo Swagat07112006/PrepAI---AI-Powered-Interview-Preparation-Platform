@@ -6,6 +6,7 @@ import errorHandler from './middlewares/error.middleware.js'
 import questionRouter from './routes/question.routes.js'
 import notesRouter from './routes/note.routes.js'
 import revisionRouter from './routes/revision.route.js'
+import dashboardRouter from './routes/dashboard.routes.js'
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use('/api/v1/auth', AuthRouter)
 app.use('/api/v1/questions', questionRouter)
 app.use('/api/v1/notes', notesRouter)
 app.use('/api/v1/revisions', revisionRouter)
+app.use('/api/v1/dashboard', dashboardRouter)
 
 app.get("/", (req, res) => {
     res.status(200).json({
