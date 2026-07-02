@@ -153,7 +153,7 @@ const getDashBoardData = asyncHandler(async (req, res) => {
     const questionActivity = recentQuestions.map((question) => ({
         type: "Question",
         title: question.title,
-        time: solvedAt
+        time: question.solvedAt
     }))
 
     const recentNotes = await Note.find(
@@ -215,7 +215,7 @@ const getDashBoardData = asyncHandler(async (req, res) => {
                 },
                 topicAnalytics: topicAnalytics,
                 solvedQuestionsChart: solvedQuestionsChart,
-                recentActivities: recentActivities.slice(10)
+                recentActivities: recentActivities.slice(0, 10)
             },
             "Dashboard data fetched successfully"
         )

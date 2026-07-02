@@ -4,6 +4,6 @@ import { getDashBoardData } from "../controllers/dashboard.controller.js";
 
 const router = Router();
 
-router.route('/', authMiddleware, getDashBoardData)
+router.route('/').get(authMiddleware, getDashBoardData)
 
 export default router;
