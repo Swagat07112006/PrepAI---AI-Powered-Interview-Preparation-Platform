@@ -1,0 +1,1 @@
+import{j as i}from"./react-vendor-BU2VEihj.js";import{m as o}from"./motion-vendor-B6Y730Mp.js";function e({children:a,className:t=""}){return i.jsx(o.main,{initial:{opacity:0,y:12},animate:{opacity:1,y:0},transition:{duration:.45,ease:"easeOut"},className:`mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 ${t}`,children:a})}export{e as P};
