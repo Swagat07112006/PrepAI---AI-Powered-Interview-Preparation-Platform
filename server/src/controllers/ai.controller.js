@@ -1,5 +1,6 @@
-import { generateRoadmap } from '../services/ai.service';
+import { generateRoadmap } from '../services/ai.service.js';
 import asyncHandler from '../utils/asyncHandler.js'
+import ApiResponse from '../utils/ApiResponse.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
         targetCompany,
@@ -26,5 +27,6 @@ const generateAIRoadmap = asyncHandler(async (req, res) => {
             "AI Roadmap generated successfully"
         )
     )
-
 })
+
+export {generateAIRoadmap}

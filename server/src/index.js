@@ -1,7 +1,6 @@
+import './config/env.js'
 import app from "./app.js";
 import initDatabase from "./db/init.js";
-import dotenv from 'dotenv'
-dotenv.config()
 
 try {
     initDatabase()
