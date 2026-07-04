@@ -1,6 +1,7 @@
 import { generateRoadmap } from '../services/ai.service.js';
 import asyncHandler from '../utils/asyncHandler.js'
 import ApiResponse from '../utils/ApiResponse.js';
+import ApiError from '../utils/ApiError.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
         targetCompany,
@@ -10,6 +11,10 @@ const generateAIRoadmap = asyncHandler(async (req, res) => {
         hoursPerDay,
         skills,
     } = req.body;
+
+    if(!targetCompany || !role || !currentLevel || !timeAvailable || !hoursPerDay || !skills){
+        throw new ApiError(400, "All fields are required")
+    }
 
     const roadmap = await generateRoadmap({
         targetCompany,

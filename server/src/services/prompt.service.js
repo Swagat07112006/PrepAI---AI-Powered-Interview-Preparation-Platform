@@ -7,31 +7,42 @@ const roadmapPrompt = ({
     skills,
 }) => {
     return `
-        You are an expert Software Engineer mentor.
-        Create a detailed interview preparation roadmap.
-        Target Company: ${targetCompany}
-        Role: ${role}
-        Current Level: ${currentLevel}
-        Time Available: ${timeAvailable}
-        hoursPerDay: ${hoursPerDay}
-        Current Skills: ${skills}
+You are an expert Software Engineering mentor.
 
-        Return only valid JSON.
+Generate a detailed interview preparation roadmap.
 
-        Format:
+Target Company: ${targetCompany}
+Role: ${role}
+Current Level: ${currentLevel}
+Time Available: ${timeAvailable}
+Study Hours Per Day: ${hoursPerDay}
+Current Skills: ${skills.join(", ")}
 
-        {
-            "overview": "",
-            "weeklyplan": [{
-                "week": 1,
-                "goal": "",
-                "topics": [],
-                "questions": [],
-                "revision": "",
-            }],
-            "tips": []
-        }
-    `
+IMPORTANT INSTRUCTIONS:
+
+- Return ONLY valid JSON.
+- Do NOT wrap the response inside markdown.
+- Do NOT use \`\`\`json.
+- Do NOT write explanations before or after the JSON.
+- Follow the property names EXACTLY.
+- The output must be directly parsable using JSON.parse().
+
+Return this exact structure:
+
+{
+  "overview": "",
+  "weeklyPlan": [
+    {
+      "week": 1,
+      "goal": "",
+      "topics": [],
+      "questions": [],
+      "revision": ""
+    }
+  ],
+  "tips": []
 }
+`;
+};
 
-export {roadmapPrompt}
+export { roadmapPrompt };
