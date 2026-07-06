@@ -1,4 +1,4 @@
-const explainerPrompt = ({ question }) => {
+const explainerPrompt = (question) => {
     return `
 You are an expert Software Engineering interviewer, DSA mentor, and competitive programming coach.
 
