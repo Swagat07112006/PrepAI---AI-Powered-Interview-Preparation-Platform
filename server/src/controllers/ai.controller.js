@@ -1,7 +1,8 @@
 import asyncHandler from '../utils/asyncHandler.js'
 import ApiResponse from '../utils/ApiResponse.js';
 import ApiError from '../utils/ApiError.js';
-import { generateRoadmap ,generateQuestionExplaination } from '../services/ai.service.js';
+import { generateRoadmap ,generateQuestionExplaination, generateResumeAnalysis } from '../services/ai.service.js';
+import extractResumeText from '../services/resume/extractResumeText.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
         targetCompany,
@@ -50,4 +51,20 @@ const generateAIQuestionExplaination = asyncHandler(async (req, res) => {
     )
 })
 
-export {generateAIRoadmap, generateAIQuestionExplaination}
+const generateAIResumeAnalysis = asyncHandler(async (req, res) => {
+    if(!req.file){
+        throw new ApiError(400, "Resume file is required")
+    }
+    const resumeText = await extractResumeText(req.file)
+    const review = await generateResumeAnalysis({resumeText})
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            review,
+            "Resume reviewed successfully"
+        )
+    )
+})
+
+export {generateAIRoadmap, generateAIQuestionExplaination, generateAIResumeAnalysis}

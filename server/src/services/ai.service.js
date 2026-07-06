@@ -1,6 +1,7 @@
 import ai from '../utils/gemeni.js'
 import parseGeminiResponse from '../utils/parseGeminiResponse.js'
 import { explainerPrompt } from './prompts/questionExplainer.prompt.js'
+import { resumeReviewPrompt } from './prompts/resumeReview.prompt.js'
 import { roadmapPrompt } from './prompts/roadmap.prompt.js'
 
 const generateAIResponse = async (prompt) => {
@@ -12,7 +13,7 @@ const generateAIResponse = async (prompt) => {
 }
 
 
-const generateRoadmap = async (roadmapData) => {
+const generateRoadmap = async ({ roadmapData }) => {
     return generateAIResponse(roadmapPrompt(roadmapData))
 }
 
@@ -20,4 +21,8 @@ const generateQuestionExplaination = async({ question }) => {
     return generateAIResponse(explainerPrompt(question))
 }
 
-export {generateRoadmap, generateQuestionExplaination}
+const generateResumeAnalysis = async({ resumeText }) => {
+    return generateAIResponse(resumeReviewPrompt(resumeText))
+}
+
+export {generateRoadmap, generateQuestionExplaination, generateResumeAnalysis}
