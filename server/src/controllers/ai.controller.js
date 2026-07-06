@@ -1,7 +1,7 @@
-import { generateRoadmap } from '../services/ai.service.js';
 import asyncHandler from '../utils/asyncHandler.js'
 import ApiResponse from '../utils/ApiResponse.js';
 import ApiError from '../utils/ApiError.js';
+import { generateRoadmap ,generateQuestionExplaination } from '../services/ai.service.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
         targetCompany,
@@ -34,4 +34,20 @@ const generateAIRoadmap = asyncHandler(async (req, res) => {
     )
 })
 
-export {generateAIRoadmap}
+const generateAIQuestionExplaination = asyncHandler(async (req, res) => {
+    const {question} = req.body;
+    if(!question){
+        throw new ApiError(400, "Question is required")
+    }
+    const explaination = await generateQuestionExplaination({question})
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            explaination,
+            "Question explained successfully"
+        )
+    )
+})
+
+export {generateAIRoadmap, generateAIQuestionExplaination}

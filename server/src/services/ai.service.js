@@ -1,15 +1,25 @@
 import ai from '../utils/gemeni.js'
 import parseGeminiResponse from '../utils/parseGeminiResponse.js'
-import { roadmapPrompt } from './prompt.service.js'
+import { explainerPrompt } from './prompts/questionExplainer.prompt.js'
+import { roadmapPrompt } from './prompts/roadmap.prompt.js'
 
 
 const generateRoadmap = async (roadmapData) => {
-    const prompt = roadmapPrompt(roadmapData)
+    const roadMapPrompt = roadmapPrompt(roadmapData)
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
-        contents: prompt
+        contents: roadMapPrompt
     });
     return parseGeminiResponse(response.text);
 }
 
-export {generateRoadmap}
+const generateQuestionExplaination = async({ question }) => {
+    const questionExplainerPrompt = explainerPrompt({question})
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: questionExplainerPrompt
+    });
+    return parseGeminiResponse(response.text);
+}
+
+export {generateRoadmap, generateQuestionExplaination}
