@@ -1,7 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js'
 import ApiResponse from '../utils/ApiResponse.js';
 import ApiError from '../utils/ApiError.js';
-import { generateRoadmap ,generateQuestionExplaination, generateResumeAnalysis } from '../services/ai.service.js';
+import { generateRoadmap, generateQuestionExplaination, generateResumeAnalysis, generateMockInterview, evaluateMockAnswer } from '../services/ai.service.js';
 import extractResumeText from '../services/resume/extractResumeText.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
@@ -13,7 +13,7 @@ const generateAIRoadmap = asyncHandler(async (req, res) => {
         skills,
     } = req.body;
 
-    if(!targetCompany || !role || !currentLevel || !timeAvailable || !hoursPerDay || !skills){
+    if (!targetCompany || !role || !currentLevel || !timeAvailable || !hoursPerDay || !skills) {
         throw new ApiError(400, "All fields are required")
     }
 
@@ -36,11 +36,11 @@ const generateAIRoadmap = asyncHandler(async (req, res) => {
 })
 
 const generateAIQuestionExplaination = asyncHandler(async (req, res) => {
-    const {question} = req.body;
-    if(!question){
+    const { question } = req.body;
+    if (!question) {
         throw new ApiError(400, "Question is required")
     }
-    const explaination = await generateQuestionExplaination({question})
+    const explaination = await generateQuestionExplaination({ question })
 
     return res.status(200).json(
         new ApiResponse(
@@ -52,11 +52,11 @@ const generateAIQuestionExplaination = asyncHandler(async (req, res) => {
 })
 
 const generateAIResumeAnalysis = asyncHandler(async (req, res) => {
-    if(!req.file){
+    if (!req.file) {
         throw new ApiError(400, "Resume file is required")
     }
     const resumeText = await extractResumeText(req.file)
-    const review = await generateResumeAnalysis({resumeText})
+    const review = await generateResumeAnalysis({ resumeText })
 
     return res.status(200).json(
         new ApiResponse(
@@ -67,4 +67,46 @@ const generateAIResumeAnalysis = asyncHandler(async (req, res) => {
     )
 })
 
-export {generateAIRoadmap, generateAIQuestionExplaination, generateAIResumeAnalysis}
+const generateAIMockInterview = asyncHandler(async (req, res) => {
+    const {
+        company,
+        role,
+        difficulty,
+        questionCount,
+    } = req.body;
+    if (!(company && role && difficulty && questionCount)) {
+        throw new ApiError(400, "All fields are required")
+    }
+
+    const interview = await generateMockInterview({
+        company,
+        role,
+        difficulty,
+        questionCount,
+    })
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            interview,
+            "Mock Interview generated successfully"
+        )
+    )
+})
+const evaluateAIMockAnswer = asyncHandler(async (req, res) => {
+    const { question, answer } = req.body;
+    if (!question || !answer) {
+        throw new ApiError(400, "Both Question and Answer are required")
+    }
+    const feedback = await evaluateMockAnswer({ question, answer })
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            feedback,
+            "Answer evaluated successfully"
+        )
+    )
+})
+
+export { generateAIRoadmap, generateAIQuestionExplaination, generateAIResumeAnalysis, generateAIMockInterview, evaluateAIMockAnswer }
