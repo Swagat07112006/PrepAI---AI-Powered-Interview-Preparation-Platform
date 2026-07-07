@@ -5,6 +5,7 @@ import { generateRoadmap, generateQuestionExplaination, generateResumeAnalysis, 
 import extractResumeText from '../services/resume/extractResumeText.js';
 import { RoadmapHistory } from '../models/history/roadmapHistory.model.js';
 import { ResumeReviewHistory } from '../models/history/resumeReviewHistory.model.js';
+import { QuestionExplanationHistory } from '../models/history/questionExplainationHistory.model.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
         targetCompany,
@@ -53,7 +54,13 @@ const generateAIQuestionExplaination = asyncHandler(async (req, res) => {
     if (!question) {
         throw new ApiError(400, "Question is required")
     }
-    const explaination = await generateQuestionExplaination({ question })
+    const explaination = await generateQuestionExplaination( question )
+
+    await QuestionExplanationHistory.create({
+        user: req.user._id,
+        question: question,
+        explanation: explaination,
+    });
 
     return res.status(200).json(
         new ApiResponse(
@@ -69,7 +76,7 @@ const generateAIResumeAnalysis = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Resume file is required")
     }
     const resumeText = await extractResumeText(req.file)
-    const review = await generateResumeAnalysis( resumeText )
+    const review = await generateResumeAnalysis(resumeText)
 
     await ResumeReviewHistory.create({
         user: req.user._id,
