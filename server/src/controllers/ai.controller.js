@@ -6,6 +6,8 @@ import extractResumeText from '../services/resume/extractResumeText.js';
 import { RoadmapHistory } from '../models/history/roadmapHistory.model.js';
 import { ResumeReviewHistory } from '../models/history/resumeReviewHistory.model.js';
 import { QuestionExplanationHistory } from '../models/history/questionExplainationHistory.model.js';
+import { MockInterviewHistory } from '../models/history/mockInterviewHistory.model.js';
+import { MockEvaluationHistory } from '../models/history/mockEvaluationHistory.model.js';
 const generateAIRoadmap = asyncHandler(async (req, res) => {
     const {
         targetCompany,
@@ -54,7 +56,7 @@ const generateAIQuestionExplaination = asyncHandler(async (req, res) => {
     if (!question) {
         throw new ApiError(400, "Question is required")
     }
-    const explaination = await generateQuestionExplaination( question )
+    const explaination = await generateQuestionExplaination(question)
 
     await QuestionExplanationHistory.create({
         user: req.user._id,
@@ -110,6 +112,14 @@ const generateAIMockInterview = asyncHandler(async (req, res) => {
         difficulty,
         questionCount,
     })
+    await MockInterviewHistory.create({
+        user: req.user._id,
+        company,
+        role,
+        difficulty,
+        questionCount,
+        interview,
+    });
 
     return res.status(200).json(
         new ApiResponse(
@@ -126,6 +136,13 @@ const evaluateAIMockAnswer = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Both Question and Answer are required")
     }
     const feedback = await evaluateMockAnswer({ question, answer })
+
+    await MockEvaluationHistory.create({
+        user: req.user._id,
+        question,
+        answer,
+        feedback,
+    });
 
     return res.status(200).json(
         new ApiResponse(
