@@ -14,16 +14,15 @@ const generateAIResponse = async (prompt) => {
     return parseGeminiResponse(AIResponse.text);
 }
 
-
-const generateRoadmap = async ({ roadmapData }) => {
+const generateRoadmap = async ( roadmapData ) => {
     return generateAIResponse(roadmapPrompt(roadmapData))
 }
 
-const generateQuestionExplaination = async ({ question }) => {
+const generateQuestionExplaination = async ( question ) => {
     return generateAIResponse(explainerPrompt(question))
 }
 
-const generateResumeAnalysis = async ({ resumeText }) => {
+const generateResumeAnalysis = async ( resumeText ) => {
     return generateAIResponse(resumeReviewPrompt(resumeText))
 }
 
