@@ -8,6 +8,7 @@ import notesRouter from './routes/note.routes.js'
 import revisionRouter from './routes/revision.route.js'
 import dashboardRouter from './routes/dashboard.routes.js'
 import aiRouter from './routes/ai.routes.js'
+import aiDashboardRouter from './routes/aiDashboard.routes.js'
 
 const app = express()
 
@@ -30,6 +31,7 @@ app.use('/api/v1/notes', notesRouter)
 app.use('/api/v1/revisions', revisionRouter)
 app.use('/api/v1/dashboard', dashboardRouter)
 app.use('/api/v1/ai', aiRouter)
+app.use('/api/v1/ai/dashboard', aiDashboardRouter)
 
 app.get("/", (req, res) => {
     res.status(200).json({
