@@ -10,7 +10,7 @@ function DropdownMenuTrigger({ ...props }) {
   return <DropdownMenuPrimitive.Trigger {...props} />;
 }
 function DropdownMenuContent({ className, sideOffset = 8, ...props }) {
-  return <DropdownMenuPrimitive.Portal><DropdownMenuPrimitive.Content sideOffset={sideOffset} className={cn('z-50 min-w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#0a1020] p-2 shadow-glow outline-none', className)} {...props} /></DropdownMenuPrimitive.Portal>;
+  return <DropdownMenuPrimitive.Portal><DropdownMenuPrimitive.Content sideOffset={sideOffset} className={cn('z-50 min-w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#14110d] p-2 shadow-glow outline-none', className)} {...props} /></DropdownMenuPrimitive.Portal>;
 }
 function DropdownMenuItem({ className, asChild = false, ...props }) {
   const Comp = asChild ? Slot : DropdownMenuPrimitive.Item;

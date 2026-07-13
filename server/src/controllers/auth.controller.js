@@ -4,13 +4,6 @@ import ApiResponse from "../utils/ApiResponse.js";
 import generateAccessAndRefreshToken from "../utils/generateAccessAndRefreshToken.js";
 import asyncHandler from '../utils/asyncHandler.js'
 
-//Steps fro Register User:
-// 1) Collect all required data(userName, email, password, fullName) from user by form(in frontend) and here we can get data using req.body
-// 2) Check if there is any user with same userName or email
-// 3) If not then create a new user using User.create()
-// 4) Create an document by User.findOne(user._id) and remove password     and refresh token
-// 5) return user data in response
-
 const registerUser = asyncHandler(async (req, res) => {
     const { userName, email, password, fullName } = req.body;
     if (!userName || !email || !password || !fullName) {
@@ -39,11 +32,6 @@ const registerUser = asyncHandler(async (req, res) => {
     )
 })
 
-// 1) Collect all required data(userName, email, password) from user by form(in frontend) and here we can get data using req.body
-// 2) Check if user exists in database using email, userName
-// 3) Check if password is correct using method present in model file
-// 4) Generate accessToken and refreshToken and store in a variable
-// 5) return response and set cookies of accessToken and refreshToken, and return user data
 const loginUser = asyncHandler(async (req, res) => {
     const { userName, email, password } = req.body;
     if ((!userName && !email) || !password) {
@@ -66,7 +54,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
-    
+
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -87,9 +75,6 @@ const loginUser = asyncHandler(async (req, res) => {
         )
 })
 
-// 1) In routes we used authMiddleware so user is attached to req
-// 2) Find user in database using req.user and unset refreshToken(make refreshToken undefined)
-// 3) return response and clear accessToken and refreshToken cookies
 const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
@@ -125,4 +110,46 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     );
 })
 
-export { registerUser, loginUser, logoutUser, getCurrentUser }
+const updateUserProfile = asyncHandler(async (req, res) => {
+    const { fullName, college, graduationYear, avatarUrl, skills } = req.body;
+
+    if (fullName !== undefined && !fullName.trim()) {
+        throw new ApiError(400, "FullName cannot be empty");
+    }
+
+    const updateData = {};
+    if (fullName !== undefined) updateData.fullName = fullName.trim();
+    if (college !== undefined) updateData.college = college.trim();
+    if (graduationYear !== undefined) updateData.graduationYear = Number(graduationYear) || undefined;
+    if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl.trim();
+
+    if (skills !== undefined) {
+        if (Array.isArray(skills)) {
+            updateData.skills = skills.map(s => s.trim()).filter(Boolean);
+        } else if (typeof skills === 'string') {
+            updateData.skills = skills.split(",").map(s => s.trim()).filter(Boolean);
+        }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: updateData
+        },
+        { new: true }
+    ).select("-password -refreshToken");
+
+    if (!updatedUser) {
+        throw new ApiError(404, "User not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            updatedUser,
+            "Profile updated successfully"
+        )
+    );
+})
+
+export { registerUser, loginUser, logoutUser, getCurrentUser, updateUserProfile }

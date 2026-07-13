@@ -1,12 +1,12 @@
 const roadmapPrompt = ({
-    targetCompany,
-    currentLevel,
-    role,
-    timeAvailable,
-    hoursPerDay,
-    skills,
+  targetCompany,
+  currentLevel,
+  role,
+  timeAvailable,
+  hoursPerDay,
+  skills,
 }) => {
-    return `
+  return `
 You are an expert Software Engineering mentor.
 
 Generate a detailed interview preparation roadmap.
@@ -31,6 +31,12 @@ Return this exact structure:
 
 {
   "overview": "",
+  "techStack": {
+    "languages": ["recommended languages, e.g. TypeScript"],
+    "frameworks": ["recommended frameworks/libraries, e.g. React, Next.js"],
+    "databases": ["recommended databases, e.g. PostgreSQL, Redis"],
+    "tools": ["other tools and platforms, e.g. Docker, AWS, Git"]
+  },
   "weeklyPlan": [
     {
       "week": 1,

@@ -20,7 +20,7 @@ function SelectValue(props) {
 function SelectContent({ className, children, position = 'popper', ...props }) {
   return (
     <SelectPrimitive.Portal>
-      <SelectPrimitive.Content className={cn('z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#0a1020] shadow-glow', className)} position={position} {...props}>
+      <SelectPrimitive.Content className={cn('z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#14110d] shadow-glow', className)} position={position} {...props}>
         <SelectPrimitive.Viewport className="p-2">{children}</SelectPrimitive.Viewport>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>

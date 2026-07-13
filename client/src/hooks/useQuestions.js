@@ -31,7 +31,12 @@ export function useQuestionActions() {
   });
   const updateQuestion = useMutation({
     mutationFn: ({ id, payload }) => questionsApi.update(id, payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['questions'] }),
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['questions'] });
+      if (variables?.id) {
+        queryClient.invalidateQueries({ queryKey: ['questions', variables.id] });
+      }
+    },
   });
   const deleteQuestion = useMutation({
     mutationFn: questionsApi.remove,

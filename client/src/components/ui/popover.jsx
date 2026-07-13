@@ -8,7 +8,7 @@ function PopoverTrigger({ ...props }) {
   return <PopoverPrimitive.Trigger {...props} />;
 }
 function PopoverContent({ className, sideOffset = 8, ...props }) {
-  return <PopoverPrimitive.Portal><PopoverPrimitive.Content sideOffset={sideOffset} className={cn('z-50 w-80 rounded-3xl border border-white/10 bg-[#0a1020] p-4 shadow-glow outline-none', className)} {...props} /></PopoverPrimitive.Portal>;
+  return <PopoverPrimitive.Portal><PopoverPrimitive.Content sideOffset={sideOffset} className={cn('z-50 w-80 rounded-3xl border border-white/10 bg-[#14110d] p-4 shadow-glow outline-none', className)} {...props} /></PopoverPrimitive.Portal>;
 }
 
 export { Popover, PopoverContent, PopoverTrigger };

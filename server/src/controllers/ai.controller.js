@@ -153,4 +153,129 @@ const evaluateAIMockAnswer = asyncHandler(async (req, res) => {
     )
 })
 
-export { generateAIRoadmap, generateAIQuestionExplaination, generateAIResumeAnalysis, generateAIMockInterview, evaluateAIMockAnswer }
+const getAIRoadmapHistory = asyncHandler(async (req, res) => {
+    const history = await RoadmapHistory.find({ user: req.user._id })
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            history,
+            "Roadmap history fetched successfully"
+        )
+    );
+});
+
+const deleteAIRoadmap = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const roadmap = await RoadmapHistory.findOne({ _id: id, user: req.user._id });
+    if (!roadmap) {
+        throw new ApiError(404, "Roadmap not found or unauthorized");
+    }
+    await RoadmapHistory.findByIdAndDelete(id);
+    return res.status(200).json(
+        new ApiResponse(200, null, "Roadmap deleted successfully")
+    );
+});
+
+const getAIExplainHistory = asyncHandler(async (req, res) => {
+
+    const history = await QuestionExplanationHistory.find({ user: req.user._id })
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            history,
+            "Question explanation history fetched successfully"
+        )
+    );
+});
+
+const deleteAIExplain = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const history = await QuestionExplanationHistory.findOne({ _id: id, user: req.user._id });
+    if (!history) {
+        throw new ApiError(404, "Explanation history not found or unauthorized");
+    }
+    await QuestionExplanationHistory.findByIdAndDelete(id);
+    return res.status(200).json(
+        new ApiResponse(200, null, "Explanation history deleted successfully")
+    );
+});
+
+const getAIResumeHistory = asyncHandler(async (req, res) => {
+    const history = await ResumeReviewHistory.find({ user: req.user._id })
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            history,
+            "Resume review history fetched successfully"
+        )
+    );
+});
+
+const deleteAIResume = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const history = await ResumeReviewHistory.findOne({ _id: id, user: req.user._id });
+    if (!history) {
+        throw new ApiError(404, "Resume review history not found or unauthorized");
+    }
+    await ResumeReviewHistory.findByIdAndDelete(id);
+    return res.status(200).json(
+        new ApiResponse(200, null, "Resume review history deleted successfully")
+    );
+});
+
+const getAIMockHistory = asyncHandler(async (req, res) => {
+
+    const history = await MockInterviewHistory.find({ user: req.user._id })
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            history,
+            "Mock interview history fetched successfully"
+        )
+    );
+});
+
+const deleteAIMock = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const history = await MockInterviewHistory.findOne({ _id: id, user: req.user._id });
+    if (!history) {
+        throw new ApiError(404, "Mock interview history not found or unauthorized");
+    }
+    await MockInterviewHistory.findByIdAndDelete(id);
+    return res.status(200).json(
+        new ApiResponse(200, null, "Mock interview history deleted successfully")
+    );
+});
+
+export {
+    generateAIRoadmap,
+    generateAIQuestionExplaination,
+    generateAIResumeAnalysis,
+    generateAIMockInterview,
+    evaluateAIMockAnswer,
+    getAIRoadmapHistory,
+    deleteAIRoadmap,
+    getAIExplainHistory,
+    deleteAIExplain,
+    getAIResumeHistory,
+    deleteAIResume,
+    getAIMockHistory,
+    deleteAIMock
+};
+
+
+
+
+

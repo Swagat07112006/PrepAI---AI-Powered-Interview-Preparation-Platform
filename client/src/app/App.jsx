@@ -15,7 +15,6 @@ const NotesPage = lazy(() => import('@/pages/notes-page').then((module) => ({ de
 const NoteDetailPage = lazy(() => import('@/pages/note-detail-page').then((module) => ({ default: module.NoteDetailPage })));
 const RevisionsPage = lazy(() => import('@/pages/revisions-page').then((module) => ({ default: module.RevisionsPage })));
 const ProfilePage = lazy(() => import('@/pages/profile-page').then((module) => ({ default: module.ProfilePage })));
-const SettingsPage = lazy(() => import('@/pages/settings-page').then((module) => ({ default: module.SettingsPage })));
 const FutureAiPage = lazy(() => import('@/pages/future-ai-page').then((module) => ({ default: module.FutureAiPage })));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page').then((module) => ({ default: module.NotFoundPage })));
 const LoadingPage = lazy(() => import('@/pages/loading-page').then((module) => ({ default: module.LoadingPage })));
@@ -58,7 +57,6 @@ function AnimatedRoutes() {
           <Route path="/notes/:id" element={<ProtectedRoute><AppLayout><NoteDetailPage /></AppLayout></ProtectedRoute>} />
           <Route path="/revisions" element={<ProtectedRoute><AppLayout><RevisionsPage /></AppLayout></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><AppLayout><ProfilePage /></AppLayout></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><AppLayout><SettingsPage /></AppLayout></ProtectedRoute>} />
           <Route path="/ai/:slug" element={<ProtectedRoute><AppLayout><FutureAiPage /></AppLayout></ProtectedRoute>} />
           <Route path="/loading" element={<LoadingPage />} />
           <Route path="*" element={<NotFoundPage />} />

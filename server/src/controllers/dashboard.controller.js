@@ -78,7 +78,8 @@ const getDashBoardData = asyncHandler(async (req, res) => {
     const solvedQuestion = await Question.find(
         {
             userId: req.user._id,
-            status: "Solved"
+            status: "Solved",
+            solvedAt: { $exists: true, $ne: null }
         },
         {
             solvedAt: 1,
@@ -108,6 +109,7 @@ const getDashBoardData = asyncHandler(async (req, res) => {
             $match: {
                 userId: req.user._id,
                 status: "Solved",
+                solvedAt: { $exists: true, $ne: null }
             }
         },
         {
@@ -141,6 +143,7 @@ const getDashBoardData = asyncHandler(async (req, res) => {
         {
             userId: req.user._id,
             status: "Solved",
+            solvedAt: { $exists: true, $ne: null }
         },
         {
             title: 1,
@@ -165,7 +168,7 @@ const getDashBoardData = asyncHandler(async (req, res) => {
             createdAt: 1,
         }
     ).sort({ createdAt: -1 })
-    .limit(5)
+        .limit(5)
 
     const noteActivity = recentNotes.map((note) => ({
         type: "note",
@@ -183,15 +186,17 @@ const getDashBoardData = asyncHandler(async (req, res) => {
             completedAt: 1,
         }
     )
-    .populate("questionId", "title")
-    .sort({ completedAt: -1 })
-    .limit(5)
+        .populate("questionId", "title")
+        .sort({ completedAt: -1 })
+        .limit(5)
 
-    const revisionActivity = recentRevisions.map((revision) => ({
-        type: "revision",
-        title: revision.questionId.title,
-        time: revision.completedAt,
-    }))
+    const revisionActivity = recentRevisions
+        .filter((revision) => revision.questionId)
+        .map((revision) => ({
+            type: "revision",
+            title: revision.questionId.title,
+            time: revision.completedAt,
+        }))
 
     const recentActivities = [
         ...questionActivity,
@@ -199,8 +204,8 @@ const getDashBoardData = asyncHandler(async (req, res) => {
         ...revisionActivity
     ]
 
-    recentActivities.sort((a,b) => b.time - a.time)
-    
+    recentActivities.sort((a, b) => b.time - a.time)
+
     return res.status(200).json(
         new ApiResponse(
             200,

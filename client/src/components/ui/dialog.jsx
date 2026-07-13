@@ -18,7 +18,7 @@ function DialogContent({ className, children, ...props }) {
   return (
     <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Content className={cn('fixed left-[50%] top-[50%] z-50 w-[min(92vw,38rem)] translate-x-[-50%] translate-y-[-50%] rounded-3xl border border-white/10 bg-[#0a1020] p-6 shadow-glow outline-none', className)} {...props}>
+      <DialogPrimitive.Content className={cn('fixed left-[50%] top-[50%] z-50 w-[min(92vw,38rem)] translate-x-[-50%] translate-y-[-50%] rounded-3xl border border-white/10 bg-[#14110d] p-6 shadow-glow outline-none', className)} {...props}>
         {children}
         <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full p-1 text-muted-foreground transition hover:bg-white/10 hover:text-foreground">
           <X className="h-4 w-4" />

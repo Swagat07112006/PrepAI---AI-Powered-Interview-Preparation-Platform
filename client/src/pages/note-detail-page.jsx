@@ -59,7 +59,7 @@ export function NoteDetailPage() {
               <p>Created {formatDateTime(note.createdAt)}</p>
               <p>Updated {formatDateTime(note.updatedAt)}</p>
             </div>
-            <div className="rounded-[28px] border border-white/10 bg-[#08101f] p-5">
+            <div className="rounded-[28px] border border-white/10 bg-[#14110d] p-5">
               <p className="whitespace-pre-wrap text-sm leading-7">{note.content}</p>
             </div>
           </CardContent>
@@ -72,9 +72,9 @@ export function NoteDetailPage() {
                 <p className="text-sm text-muted-foreground">Summary utilities</p>
                 <h2 className="mt-1 text-2xl font-semibold">Future note AI tools</h2>
               </div>
-              <NotebookPen className="h-5 w-5 text-cyan-300" />
+              <NotebookPen className="h-5 w-5 text-amber-400" />
             </div>
-            <div className="rounded-[28px] border border-cyan-400/20 bg-cyan-400/10 p-5 text-sm text-cyan-100">
+            <div className="rounded-[28px] border border-amber-500/20 bg-amber-500/10 p-5 text-sm text-amber-100">
               Note summarization, condensation, and follow-up question extraction are designed as future surfaces.
             </div>
             <div className="grid gap-3 sm:grid-cols-2">

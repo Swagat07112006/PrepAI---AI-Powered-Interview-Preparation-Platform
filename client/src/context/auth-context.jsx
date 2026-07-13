@@ -64,6 +64,18 @@ export function AuthProvider({ children }) {
     },
   });
 
+  const updateProfileMutation = useMutation({
+    mutationFn: authApi.updateProfile,
+    onSuccess: (response) => {
+      queryClient.setQueryData(['auth', 'me', accessToken], response?.data || null);
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+      toast.success(response?.message || 'Profile updated successfully');
+    },
+    onError: (error) => {
+      toast.error(error?.message || 'Unable to update profile');
+    },
+  });
+
   const value = React.useMemo(
     () => ({
       user: userQuery.data || null,
@@ -73,12 +85,14 @@ export function AuthProvider({ children }) {
       login: (payload) => loginMutation.mutateAsync(payload),
       register: (payload) => registerMutation.mutateAsync(payload),
       logout: () => logoutMutation.mutateAsync(),
+      updateProfile: (payload) => updateProfileMutation.mutateAsync(payload),
       authError: userQuery.error,
       isLoggingIn: loginMutation.isPending,
       isRegistering: registerMutation.isPending,
       isLoggingOut: logoutMutation.isPending,
+      isUpdatingProfile: updateProfileMutation.isPending,
     }),
-    [accessToken, loginMutation, logoutMutation, registerMutation, userQuery.data, userQuery.error, userQuery.isLoading],
+    [accessToken, loginMutation, logoutMutation, registerMutation, updateProfileMutation, userQuery.data, userQuery.error, userQuery.isLoading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

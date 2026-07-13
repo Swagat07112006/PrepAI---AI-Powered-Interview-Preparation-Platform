@@ -11,7 +11,7 @@ function TooltipTrigger({ ...props }) {
   return <TooltipPrimitive.Trigger {...props} />;
 }
 function TooltipContent({ className, sideOffset = 8, ...props }) {
-  return <TooltipPrimitive.Portal><TooltipPrimitive.Content sideOffset={sideOffset} className={cn('z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#0a1020] px-3 py-2 text-xs text-foreground shadow-glow', className)} {...props} /></TooltipPrimitive.Portal>;
+  return <TooltipPrimitive.Portal><TooltipPrimitive.Content sideOffset={sideOffset} className={cn('z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#14110d] px-3 py-2 text-xs text-foreground shadow-glow', className)} {...props} /></TooltipPrimitive.Portal>;
 }
 
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
