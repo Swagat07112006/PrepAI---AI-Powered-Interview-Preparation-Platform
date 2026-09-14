@@ -49,9 +49,15 @@ PrepAI is a premium, developer-focused interview preparation workspace designed 
 
    - Create a `.env` file in the `server` directory:
      ```env
-     PORT=5000
-     MONGO_URI=mongodb://localhost:27017/prepai
-     JWT_SECRET=your_jwt_secret_key_here
+   PORT=5000
+   NODE_ENV=development
+   CORS_ORIGIN=http://localhost:5173
+   MONGODB_URI=mongodb://localhost:27017/prepai
+   ACCESS_TOKEN_SECRET=your_access_token_secret_here
+   ACCESS_TOKEN_EXPIRY=1d
+   REFRESH_TOKEN_SECRET=your_refresh_token_secret_here
+   REFRESH_TOKEN_EXPIRY=10d
+   GEMINI_API_KEY=your_gemini_api_key_here
      SMTP_HOST=smtp.mailtrap.io
      SMTP_PORT=2525
      SMTP_USER=your_smtp_username
