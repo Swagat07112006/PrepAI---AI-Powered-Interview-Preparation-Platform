@@ -8,6 +8,12 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  const accessToken = window.localStorage.getItem('prepai_access_token');
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
   return config;
 });
 
