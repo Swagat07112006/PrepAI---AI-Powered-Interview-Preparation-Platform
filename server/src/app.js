@@ -13,7 +13,18 @@ import aiDashboardRouter from './routes/aiDashboard.routes.js'
 const app = express()
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: (requestOrigin, callback) => {
+        const configuredOrigins = (process.env.CORS_ORIGIN || '')
+            .split(',')
+            .map((origin) => origin.trim())
+            .filter(Boolean)
+
+        if (!requestOrigin || configuredOrigins.includes('*') || configuredOrigins.includes(requestOrigin)) {
+            return callback(null, requestOrigin || true)
+        }
+
+        return callback(new Error('Origin is not allowed by CORS'))
+    },
     credentials: true,
 }))
 app.use(express.json({
